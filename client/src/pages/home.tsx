@@ -1,17 +1,16 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router";
+import { Link } from "react-router";
 import type { Note } from "../types";
 import { useTheme } from "../utils/theme";
 import NoteCreate from "../components/Note/NoteCreate";
-import { islogin } from "../utils/auth";
+import { getCookie, islogin, logout } from "../utils/auth";
 import Footer from "../components/Footer";
 
 export default function Home() {
     const { theme, toggleTheme } = useTheme();
     const [notes, setNotes] = useState<Note[]>([]);
     const [favorites, setFavorites] = useState<Note[]>([]);
-    const navigate = useNavigate();
-    const token = document.cookie.split("=")[1];
+    const token = getCookie("token");
 
     useEffect(() => {
         islogin(false);
@@ -54,8 +53,7 @@ export default function Home() {
     };
 
     const handleLogout = () => {
-        document.cookie = "token=; path=/; max-age=0";
-        navigate("/login");
+        logout();
     };
 
     return (
@@ -127,28 +125,28 @@ export default function Home() {
                     </div>
 
                     {token && (
-                    <div className="md:col-span-1">
-                        <h2 className="text-xl font-semibold mb-4 dark:text-white">Mes Favoris</h2>
-                        <div className="space-y-2">
-                            {favorites.length === 0 && <p className="text-gray-500 dark:text-gray-400 text-sm italic">Aucune note à afficher.</p>}
-                            {favorites.map((note) => (
-                                <Link
-                                    key={note.id}
-                                    to={`/note/${note.slug}`}
-                                    className="block bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition shadow-sm"
-                                >
-                                    <div className="flex justify-between items-start">
-                                        <p className="font-medium truncate text-gray-900 dark:text-white">{note.name || "Sans titre"}</p>
-                                        <div className="flex gap-1">
-                                            {note.is_private ? <span className="text-[10px] bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-1.5 py-0.5 rounded">PRIVE</span> : null}
-                                            {note.hasPassword ? <span className="text-[10px] bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 px-1.5 py-0.5 rounded">🔒</span> : null}
+                        <div className="md:col-span-1">
+                            <h2 className="text-xl font-semibold mb-4 dark:text-white">Mes Favoris</h2>
+                            <div className="space-y-2">
+                                {favorites.length === 0 && <p className="text-gray-500 dark:text-gray-400 text-sm italic">Aucune note à afficher.</p>}
+                                {favorites.map((note) => (
+                                    <Link
+                                        key={note.id}
+                                        to={`/note/${note.slug}`}
+                                        className="block bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition shadow-sm"
+                                    >
+                                        <div className="flex justify-between items-start">
+                                            <p className="font-medium truncate text-gray-900 dark:text-white">{note.name || "Sans titre"}</p>
+                                            <div className="flex gap-1">
+                                                {note.is_private ? <span className="text-[10px] bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-1.5 py-0.5 rounded">PRIVE</span> : null}
+                                                {note.hasPassword ? <span className="text-[10px] bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 px-1.5 py-0.5 rounded">🔒</span> : null}
+                                            </div>
                                         </div>
-                                    </div>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400">{note.slug}</p>
-                                </Link>
-                            )) || <div className="text-gray-500 dark:text-gray-400 text-sm italic">Aucune note à afficher.</div>}
+                                        <p className="text-xs text-gray-500 dark:text-gray-400">{note.slug}</p>
+                                    </Link>
+                                )) || <div className="text-gray-500 dark:text-gray-400 text-sm italic">Aucune note à afficher.</div>}
+                            </div>
                         </div>
-                    </div>
                     )}
                 </main>
                 <Footer />

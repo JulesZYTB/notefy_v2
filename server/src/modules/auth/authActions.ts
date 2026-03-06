@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import type { RequestHandler } from "express";
 import userRepository from "../user/userRepository";
 
+
 const login: RequestHandler = async (req, res, next) => {
     try {
         const { email, password } = req.body;
@@ -10,7 +11,7 @@ const login: RequestHandler = async (req, res, next) => {
         const user = await userRepository.readByEmail(email);
 
         if (user == null) {
-            res.sendStatus(422);
+            res.sendStatus(401).json({ message: "Unauthorized" });
             return;
         }
 
@@ -25,9 +26,12 @@ const login: RequestHandler = async (req, res, next) => {
                 { expiresIn: "24h" },
             );
 
-            res.json({ token, user });
+            res.cookie('token', `${token}`, {
+                expires: new Date(Date.now() + 24 * 3600000)
+            });
+            return res.status(200).json({ message: "Connexion reussi" });
         } else {
-            res.sendStatus(422);
+            return res.sendStatus(401).json({ message: "Unauthorized" });
         }
     } catch (err) {
         next(err);

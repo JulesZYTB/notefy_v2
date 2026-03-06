@@ -6,7 +6,7 @@ export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-    
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
@@ -14,12 +14,15 @@ export default function Login() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
+                credentials: 'include',
             });
 
             if (response.ok) {
-                const data = await response.json();
-                document.cookie = `token=${data.token}; path=/; max-age=${60 * 60 * 24 * 7}`;
-                navigate("/");
+                if (response.status === 200) {
+                    navigate("/");
+                } else {
+                    alert("Échec de la connexion");
+                }
             } else {
                 alert("Échec de la connexion");
             }

@@ -31,7 +31,7 @@ const hashPassword: RequestHandler = async (req, res, next) => {
 const verifyToken: RequestHandler = (req, res, next) => {
     try {
         const authorization = req.get("Authorization");
-
+        console.log(authorization)
         if (authorization == null) {
             throw new Error("Authorization header is missing");
         }
