@@ -1,6 +1,7 @@
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import type { RequestHandler } from "express";
+import userRepository from "../modules/user/userRepository";
 
 const hashingOptions = {
     type: argon2.argon2id,
@@ -28,34 +29,39 @@ const hashPassword: RequestHandler = async (req, res, next) => {
     }
 };
 
-const verifyToken: RequestHandler = (req, res, next) => {
+const verifyToken: RequestHandler = async (req, res, next) => {
     try {
-        const authorization = req.get("Authorization");
-        console.log(authorization)
-        if (authorization == null) {
-            throw new Error("Authorization header is missing");
+        const token = req.cookies?.token || req.get("Authorization")?.split(" ")[1];
+
+        if (!token) {
+            res.status(401).json({ message: "Token manquant" });
+            return;
         }
 
-        const [type, token] = authorization.split(" ");
+        const decoded = jwt.verify(token, process.env.APP_SECRET as string) as unknown as {
+            sub: number;
+            role: string;
+            email: string
+        };
 
-        if (type !== "Bearer") {
-            throw new Error("Authorization type is not Bearer");
+        req.auth = decoded;
+
+        const user = await userRepository.readByEmail(req.auth.email);
+
+        if (user == null) {
+            res.status(401).json({ message: "Utilisateur non trouvé" });
+            return;
         }
 
-        (req as any).auth = jwt.verify(token, process.env.APP_SECRET as string);
+        req.user = user;
 
         next();
     } catch (err) {
-        if (err instanceof jwt.TokenExpiredError) {
-            console.warn("JWT expired:", err.expiredAt);
-        } else if (err instanceof jwt.JsonWebTokenError) {
-            console.warn("Invalid JWT:", err.message);
-        } else {
-            console.error(err);
-        }
+        console.error("Erreur de token:", err);
         res.sendStatus(401);
     }
 };
+
 
 const optionalVerifyToken: RequestHandler = (req, res, next) => {
     try {
@@ -65,7 +71,11 @@ const optionalVerifyToken: RequestHandler = (req, res, next) => {
             const [type, token] = authorization.split(" ");
 
             if (type === "Bearer") {
-                (req as any).auth = jwt.verify(token, process.env.APP_SECRET as string);
+                req.auth = jwt.verify(token, process.env.APP_SECRET as string) as unknown as {
+                    sub: number;
+                    role: string;
+                    email: string
+                };
             }
         }
 

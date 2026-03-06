@@ -20,6 +20,6 @@ export function getCookie(name: string) {
 }
 
 export function logout() {
-    /* document.cookie = "token=; path=/; max-age=0";
-    window.location.href = "/login" */;
+    document.cookie = "token=; path=/; max-age=0";
+    window.location.href = "/login";
 }

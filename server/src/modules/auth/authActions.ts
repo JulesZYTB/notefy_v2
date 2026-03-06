@@ -11,7 +11,7 @@ const login: RequestHandler = async (req, res, next) => {
         const user = await userRepository.readByEmail(email);
 
         if (user == null) {
-            res.sendStatus(401).json({ message: "Unauthorized" });
+            res.status(401).json({ message: "Unauthorized" });
             return;
         }
 
@@ -21,7 +21,7 @@ const login: RequestHandler = async (req, res, next) => {
             delete user.password;
 
             const token = jwt.sign(
-                { sub: user.id, role: user.role },
+                { sub: user.id, role: user.role, email: user.email },
                 process.env.APP_SECRET as string,
                 { expiresIn: "24h" },
             );
@@ -29,9 +29,11 @@ const login: RequestHandler = async (req, res, next) => {
             res.cookie('token', `${token}`, {
                 expires: new Date(Date.now() + 24 * 3600000)
             });
-            return res.status(200).json({ message: "Connexion reussi" });
+            res.status(200).json({ message: "Connexion reussi" });
+            return;
         } else {
-            return res.sendStatus(401).json({ message: "Unauthorized" });
+            res.status(401).json({ message: "Unauthorized" });
+            return;
         }
     } catch (err) {
         next(err);
