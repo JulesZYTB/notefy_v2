@@ -1,14 +1,22 @@
-export function islogin(require: boolean) {
+export async function islogin(require: boolean) {
     const token = getCookie("token");
-    console.log("token", token);
-    if (!token || token === null) return require ? logout() : false;
-
-    try {
-        const { exp } = JSON.parse(atob(token.split('.')[1]));
-        if (Date.now() >= exp * 1000) return logout();
-    } catch {
-        return logout();
+    if (token && require) {
+        const res = await fetch("/api/me", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        })
+        if (res.status === 401) {
+            logout();
+        } else {
+            return true;
+        }
+    } else if (require) {
+        logout();
     }
+    return false;
 }
 
 export function getCookie(name: string) {

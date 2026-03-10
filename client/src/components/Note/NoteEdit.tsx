@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Note } from "../../types";
 import Footer from "../Footer";
+import { islogin } from "../../utils/auth";
 
 interface NoteEditProps {
     note: Note;
@@ -15,6 +16,10 @@ export default function NoteEdit({ note, token, onCancel, onUpdateSuccess }: Not
     const [editIsPrivate, setEditIsPrivate] = useState(note.is_private || false);
     const [editPassword, setEditPassword] = useState("");
 
+    useEffect(() => {
+        islogin(true);
+    }, []);
+    
     const handleUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!token) return;

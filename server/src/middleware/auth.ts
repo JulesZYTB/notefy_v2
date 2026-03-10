@@ -57,7 +57,7 @@ const verifyToken: RequestHandler = async (req, res, next) => {
 
         next();
     } catch (err) {
-        console.error("Erreur de token:", err);
+        // console.error("Erreur de token:", err);
         res.sendStatus(401);
     }
 };

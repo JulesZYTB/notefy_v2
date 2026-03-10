@@ -39,7 +39,7 @@ export default function NotePage() {
                 headers: token ? { Authorization: `Bearer ${token}` } : {},
             });
             if (response.status === 401) {
-                handleLogout();
+                islogin(true);
                 return;
             }
             if (response.ok) {
@@ -60,7 +60,7 @@ export default function NotePage() {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (response.status === 401) {
-                handleLogout();
+                islogin(true);
                 return;
             }
             if (response.ok) {
@@ -103,7 +103,7 @@ export default function NotePage() {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 if (response.status === 401) {
-                    handleLogout();
+                    islogin(true);
                     return;
                 }
                 if (response.ok) setIsFavorited(false);
@@ -117,7 +117,7 @@ export default function NotePage() {
                     body: JSON.stringify({ noteId: note.id })
                 });
                 if (response.status === 401) {
-                    handleLogout();
+                    islogin(true);
                     return;
                 }
                 if (response.ok) setIsFavorited(true);
@@ -137,7 +137,7 @@ export default function NotePage() {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (response.status === 401) {
-                handleLogout();
+                islogin(true);
                 return;
             }
             if (response.ok) navigate("/");

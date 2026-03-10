@@ -50,4 +50,18 @@ const add: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, read, add };
+const readCurrentUser: RequestHandler = async (req, res, next) => {
+  try {
+    const user = req.user;
+
+    if (user == null) {
+      res.status(401).json({ message: "Unauthorized" });
+    } else {
+      res.status(200).json({ message: "Authorized" });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { browse, read, add, readCurrentUser };

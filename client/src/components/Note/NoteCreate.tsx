@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { islogin } from "../../utils/auth";
 
 interface NoteCreateProps {
     token: string | null;
@@ -10,6 +11,10 @@ export default function NoteCreate({ token, onSuccess }: NoteCreateProps) {
     const [content, setContent] = useState("");
     const [isPrivate, setIsPrivate] = useState(false);
     const [password, setPassword] = useState("");
+
+    useEffect(() => {
+        islogin(true);
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
