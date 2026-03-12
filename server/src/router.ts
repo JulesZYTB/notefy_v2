@@ -20,9 +20,9 @@ router.get("/me", authService.verifyToken, userActions.readCurrentUser);
 import noteActions from "./modules/note/noteActions";
 
 router.get("/notes", authService.optionalVerifyToken, noteActions.browse);
-router.get("/notes/:id(\\d+)", noteActions.read);
-router.get("/notes/:slug", noteActions.readBySlug);
-router.post("/notes/:slug/verify-password", noteActions.verifyPassword);
+router.get("/notes/:id(\\d+)", authService.optionalVerifyToken, noteActions.read);
+router.get("/notes/:slug", authService.optionalVerifyToken, noteActions.readBySlug);
+router.post("/notes/:slug/verify-password", authService.optionalVerifyToken, noteActions.verifyPassword);
 
 // Protected routes
 router.use(authService.verifyToken);

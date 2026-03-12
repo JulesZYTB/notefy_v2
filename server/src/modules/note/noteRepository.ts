@@ -10,9 +10,11 @@ type Note = {
   is_private: boolean;
   linkshare: boolean;
   password?: string | null;
+  user_id?: number | null;
   created_at: string;
   updated_at: string;
   content?: string;
+  auth?: boolean;
 };
 
 class NoteRepository {
@@ -57,7 +59,7 @@ class NoteRepository {
     }
   }
 
-  async read(id: number) {
+  async read(id: number, userId?: number) {
     const [rows] = await databaseClient.query<Rows>(
       `select n.*, c.content from notes n 
        left join content c on n.id = c.note_id 
@@ -65,10 +67,16 @@ class NoteRepository {
       [id],
     );
 
-    return rows[0] as Note;
+    const note = rows[0] as Note;
+
+    if (note && userId) {
+      note.auth = note.user_id === userId;
+    }
+
+    return note;
   }
 
-  async readBySlug(slug: string) {
+  async readBySlug(slug: string, userId?: number) {
     const [rows] = await databaseClient.query<Rows>(
       `select n.*, c.content from notes n 
        left join content c on n.id = c.note_id 
@@ -76,7 +84,13 @@ class NoteRepository {
       [slug],
     );
 
-    return rows[0] as Note;
+    const note = rows[0] as Note;
+
+    if (note && userId) {
+      note.auth = note.user_id === userId;
+    }
+
+    return note;
   }
 
   async readAll(userId?: number) {

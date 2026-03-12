@@ -5,6 +5,8 @@ Bienvenue dans la documentation de l'API Notefy. Cette application permet de gé
 Les diagrammes de conception sont disponibles dans le dossier `docs/` :
 - [**MCD** (Modèle Conceptuel de Données)](docs/mcd.drawio) : Représentation des entités et relations.
 - [**MLD** (Modèle Logique de Données)](docs/mld.drawio) : Détail des tables, colonnes et clés étrangères.
+- [**UML Use-case**](docs/uml%20Use-case.drawio) : Diagramme des cas d'utilisation.
+- [**UML Généralisation de rôle**](docs/uml%20generasilation%20de%20role.drawio) : Diagramme de structure des rôles.
 
 ---
 ## 🛠️ Installation et Configuration Locale
@@ -128,7 +130,7 @@ L'API est construite avec **Node.js** et **Express**. Elle utilise des Jetons We
 
 #### 2. Voir une note par Slug
 *   **Route :** `GET /api/notes/:slug`
-*   **Description :** Récupère le contenu d'une note. Si elle est protégée par mot de passe, le contenu sera masqué jusqu'à vérification.
+*   **Description :** Récupère le contenu d'une note. Retourne une propriété `auth: true` si l'utilisateur connecté est l'auteur. Si elle est protégée par mot de passe, le contenu sera masqué jusqu'à vérification.
 
 #### 3. Vérifier le mot de passe d'une note
 *   **Route :** `POST /api/notes/:slug/verify-password`
@@ -181,4 +183,4 @@ Pour plus de détails, consultez le fichier [LICENSE.md](LICENSE.md).
 
 ---
 
-*Document mis à jour le 10 Mars 2026 par Antigravity à l'aide de l'IA.*
+*Document mis à jour le 12 Mars 2026 par Antigravity à l'aide de l'IA.*

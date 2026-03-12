@@ -23,7 +23,8 @@ const browse: RequestHandler = async (req, res, next) => {
 const read: RequestHandler = async (req, res, next) => {
   try {
     const noteId = Number(req.params.id);
-    const note = await noteRepository.read(noteId);
+    const userId = (req as any).auth?.sub;
+    const note = await noteRepository.read(noteId, userId);
 
     if (note == null) {
       res.sendStatus(404);
@@ -38,7 +39,8 @@ const read: RequestHandler = async (req, res, next) => {
 const readBySlug: RequestHandler = async (req, res, next) => {
   try {
     const { slug } = req.params;
-    const note = await noteRepository.readBySlug(slug);
+    const userId = (req as any).auth?.sub;
+    const note = await noteRepository.readBySlug(slug, userId);
 
     if (note == null) {
       res.sendStatus(404);
@@ -63,7 +65,8 @@ const verifyPassword: RequestHandler = async (req, res, next) => {
   try {
     const { slug } = req.params;
     const { password } = req.body;
-    const note = await noteRepository.readBySlug(slug);
+    const userId = (req as any).auth?.sub;
+    const note = await noteRepository.readBySlug(slug, userId);
 
     if (note == null) {
       res.sendStatus(404);

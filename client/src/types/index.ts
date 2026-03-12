@@ -16,6 +16,7 @@ export interface Note {
     content?: string;
     created_at?: string;
     hasPassword?: boolean;
+    auth?: boolean;
 }
 
 export interface LoginResponse {

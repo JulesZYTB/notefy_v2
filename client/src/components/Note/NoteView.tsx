@@ -33,7 +33,7 @@ export default function NoteView({
                     <p className="text-sm text-gray-500 dark:text-gray-400">Slug: {note.slug}</p>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                    {token && (
+                    {token && note.auth && (
                         <>
                             <button
                                 onClick={onToggleFavorite}

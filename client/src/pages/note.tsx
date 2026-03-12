@@ -2,7 +2,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useParams, useNavigate } from "react-router";
 import type { Note } from "../types";
 import { lazy } from "react";
-import { islogin, logout } from "../utils/auth";
+import { getCookie, islogin, logout } from "../utils/auth";
 import Loading from "../components/Loading";
 
 const NoteView = lazy(() => import("../components/Note/NoteView"));
@@ -19,7 +19,7 @@ export default function NotePage() {
     const [showCopied, setShowCopied] = useState(false);
 
     const navigate = useNavigate();
-    const token = document.cookie.split("=")[1];
+    const token = getCookie("token");
 
     const handleLogout = () => {
         logout();
@@ -39,7 +39,7 @@ export default function NotePage() {
                 headers: token ? { Authorization: `Bearer ${token}` } : {},
             });
             if (response.status === 401) {
-                islogin(true);
+                // islogin(true);
                 return;
             }
             if (response.ok) {
@@ -60,7 +60,7 @@ export default function NotePage() {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (response.status === 401) {
-                islogin(true);
+                // islogin(true);
                 return;
             }
             if (response.ok) {
@@ -205,8 +205,8 @@ export default function NotePage() {
                     onToggleFavorite={handleToggleFavorite}
                     onShare={handleShare}
                     onEdit={() => setIsEditing(true)}
-                onDelete={handleDelete}
-            />
+                    onDelete={handleDelete}
+                />
             </Suspense>
         </div>
     );
