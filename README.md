@@ -3,10 +3,27 @@ Bienvenue dans la documentation de l'API Notefy. Cette application permet de gé
 ##  Modélisation de la Base de Données
 
 Les diagrammes de conception sont disponibles dans le dossier `docs/` :
+
 - [**MCD** (Modèle Conceptuel de Données)](docs/mcd.drawio) : Représentation des entités et relations.
 - [**MLD** (Modèle Logique de Données)](docs/mld.drawio) : Détail des tables, colonnes et clés étrangères.
-- [**UML Use-case**](docs/uml%20Use-case.drawio) : Diagramme des cas d'utilisation.
-- [**UML Généralisation de rôle**](docs/uml%20generasilation%20de%20role.drawio) : Diagramme de structure des rôles.
+
+### 📊 Diagrammes UML
+
+#### 1. [**UML Use-case**](docs/uml%20Use-case.drawio)
+Ce diagramme détaille les interactions entre l'**Internaute** et le système :
+- **Actions sans authentification** : Voir les notes publiques.
+- **Actions nécessitant une Connexion** (via Inscription) :
+    - Créer une nouvelle note.
+    - Voir ses propres notes privées.
+    - Voir ses notes mises en favoris.
+    - Modifier ses notes existantes (incluant le titre, le contenu, le mot de passe, le statut privé/public).
+    - Partager une note (via un lien).
+
+#### 2. [**UML Généralisation de rôle**](docs/uml%20generasilation%20de%20role.drawio)
+Ce diagramme illustre la hiérarchie des utilisateurs et l'évolution de leurs droits :
+- **Visiteur** : Rôle de base qui peut uniquement consulter les notes publiques.
+- **Futur Client** : Un visiteur qui entame une démarche d'inscription ou de connexion.
+- **Client** : Utilisateur authentifié ayant des droits étendus (Création, Modification, Gestion des favoris et accès aux notes privées).
 
 ---
 ## 🛠️ Installation et Configuration Locale
